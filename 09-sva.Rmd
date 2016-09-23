@@ -40,19 +40,31 @@ tt<- lmfit$coef[,2]*sqrt(lmfit$df.residual)/(2*lmfit$sigma)
 Batch<- lmfit$coef[,3]%*%t(svaX[,3])
 Signal<-lmfit$coef[,1:2]%*%t(svaX[,1:2])
 error <- pdreport-Signal-Batch
-##demean for plot
-Signal <-Signal-rowMeans(Signal)
-mat <- pdreport-rowMeans(pdreport)
+
+# Signal <-Signal-rowMeans(Signal)
+# mat <- pdreport-rowMeans(pdreport)
 
 library(rafalib)
 library(RColorBrewer)
 mypar(1,4,mar = c(2.75, 4.5, 2.6, 1.1))
 icolors <- colorRampPalette(rev(brewer.pal(11,"RdYlBu")))(100)
 
-image(t(mat),col=icolors,xaxt="n",yaxt="n")
+image(t(pdreport),col=icolors,xaxt="n",yaxt="n")
 image(t(Signal),col=icolors,xaxt="n",yaxt="n")
 image(t(Batch),col=icolors,xaxt="n",yaxt="n")
 image(t(error),col=icolors,xaxt="n",yaxt="n")
 
+a <- xcmsRaw(cdffiles[1])
+f <- a@env$profile
+imagemat(f)
+
+a <- xcmsRaw(cdffiles[2])
+f <- a@env$profile
+imagemat(f)
+
+cdffiles <- list.files('control', recursive = TRUE, full.names = TRUE)
+d <- xcmsRaw(cdffiles[1])
+f <- d@env$profile
+imagemat(f)
 ```
 
